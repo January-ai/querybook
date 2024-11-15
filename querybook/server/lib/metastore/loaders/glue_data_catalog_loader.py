@@ -68,13 +68,13 @@ class GlueDataCatalogLoader(BaseMetastoreLoader):
 
         columns = [
             DataColumn(col.get("Name"), col.get("Type"), col.get("Comment"))
-            for col in glue_table.get("StorageDescriptor").get("Columns")
+            for col in (glue_table.get("StorageDescriptor").get("Columns") or [])
         ]
 
         columns.extend(
             [
                 DataColumn(col.get("Name"), col.get("Type"), col.get("Comment"))
-                for col in glue_table.get("PartitionKeys")
+                for col in (glue_table.get("PartitionKeys") or [])
             ]
         )
 

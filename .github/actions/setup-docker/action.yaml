@@ -1,0 +1,33 @@
+name: "Setup docker buildx"
+description: ""
+inputs:
+  aws-access-key-id:
+    description: "AWS access key id"
+    required: true
+  aws-secret-access-key:
+    description: "AWS secret access key"
+    required: true
+outputs:
+  buildx-name:
+    description: "Needed for buildx "
+    value: ${{ steps.buildx.outputs.name }}
+runs:
+  using: "composite"
+  steps:
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ inputs.aws-access-key-id }}
+        aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
+        aws-region: us-east-1
+    - name: Set up Docker Buildx
+      id: buildx
+      uses: docker/setup-buildx-action@v3
+      with:
+        platforms: linux/amd64
+        provenance: false
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+      with:
+        mask-password: "true"

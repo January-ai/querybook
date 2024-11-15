@@ -24,7 +24,7 @@ def upgrade():
         sa.Column("created_at", sa.DateTime(), nullable=True),
         sa.Column("updated_at", sa.DateTime(), nullable=True),
         sa.Column("created_by", sa.Integer(), nullable=True),
-        sa.Column("text", sa.Text(length=16777215), nullable=True),
+        sa.Column("text", sa.Text(), nullable=True),
         sa.Column("parent_comment_id", sa.Integer(), nullable=True),
         sa.Column("archived", sa.Boolean(), nullable=False),
         sa.ForeignKeyConstraint(["created_by"], ["user.id"], ondelete="SET NULL"),

@@ -1,0 +1,33 @@
+name: Build and Push Querybook docker image
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag_version:
+        description: 'Tag the image with this version. Make sure to increment the version number from the previous.'
+        required: true
+
+concurrency: build_image
+
+jobs:
+  build_image:
+    name: Build Image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/setup-docker
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - uses: docker/build-push-action@v5
+        with:
+          push: true
+          builder: ${{ steps.setup-docker.buildx-name }}
+          platforms: linux/amd64
+          build-args: "EXTRA_PIP_INSTALLS=platform/aws.txt"
+          provenance: false
+          cache-from: type=registry,ref=271792886406.dkr.ecr.us-east-1.amazonaws.com/querybook:cache
+          cache-to: mode=max,image-manifest=true,oci-mediatypes=true,type=registry,ref=271792886406.dkr.ecr.us-east-1.amazonaws.com/querybook:cache
+          context: ./
+          file: Dockerfile
+          tags: 271792886406.dkr.ecr.us-east-1.amazonaws.com/querybook:${{ github.event.inputs.tag_version }}

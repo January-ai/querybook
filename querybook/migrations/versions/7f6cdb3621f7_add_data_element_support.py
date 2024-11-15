@@ -26,7 +26,7 @@ def upgrade():
         sa.Column("metastore_id", sa.Integer(), nullable=False),
         sa.Column("name", sa.String(length=255), nullable=False),
         sa.Column("type", sa.String(length=4096), nullable=False),
-        sa.Column("description", sa.Text(length=16777215), nullable=True),
+        sa.Column("description", sa.Text(), nullable=True),
         sa.Column("properties", sa.JSON(), nullable=True),
         sa.ForeignKeyConstraint(["created_by"], ["user.id"], ondelete="SET NULL"),
         sa.ForeignKeyConstraint(

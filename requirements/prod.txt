@@ -1,1 +1,3 @@
 uWSGI==2.0.22
+pyathena==3.9.0
+
