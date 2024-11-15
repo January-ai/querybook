@@ -2,10 +2,6 @@ name: Build and Push Querybook docker image
 
 on:
   workflow_dispatch:
-    inputs:
-      tag_version:
-        description: 'Tag the image with this version. Make sure to increment the version number from the previous.'
-        required: true
 
 concurrency: build_image
 
@@ -30,4 +26,4 @@ jobs:
           cache-to: mode=max,image-manifest=true,oci-mediatypes=true,type=registry,ref=271792886406.dkr.ecr.us-east-1.amazonaws.com/querybook:cache
           context: ./
           file: Dockerfile
-          tags: 271792886406.dkr.ecr.us-east-1.amazonaws.com/querybook:${{ github.event.inputs.tag_version }}
+          tags: 271792886406.dkr.ecr.us-east-1.amazonaws.com/querybook:${{ github.sha }}
